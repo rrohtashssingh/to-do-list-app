@@ -1,0 +1,108 @@
+Css----------------------------------------
+
+.feedback{
+    padding-left: 40px;
+    color:red;
+    display: none;
+    padding-bottom: 20px;
+}
+.show{
+    display: block;
+}
+ul li{
+   text-decoration: none;
+   list-style: none;
+   padding: 10px 30px 30px 50px ;
+   font-size: 17px;
+   user-select: none;
+   position: relative;
+   display: flex;
+   justify-content: space-between;
+}
+ ul li::before{
+    content:'';
+    position: absolute;
+    height: 28px;
+    border-radius: 50%;
+    width:28px;
+    background-image: url("images/unchecked.png");
+     background-size: cover;
+     background-position: center;
+     top:7px;
+     left:13px;
+}
+ul li.checked{
+    color:#555;
+    text-decoration: line-through;
+}
+ul li.checked::before{
+    background-image: url("images/checked.png");
+}
+li span{
+width:40px;
+height: 40px;
+font-size: 22px;
+color:#555;
+line-height: 40px;
+text-align: center;
+}
+li span:hover{
+    background-color: orange;
+    border-radius: 50%;
+   /* padding: 2px 6px ; */
+   cursor: pointer;    
+}
+@media (max-width:430px) {
+    input{
+        width:40vw;
+    }
+    
+}
+
+
+
+js--------------------------------------------
+
+
+const input = document.querySelector('#input-box')
+const btn = document.querySelector('.btn');
+const feedback = document.querySelector('.feedback')
+const list=document.querySelector('#list')
+
+btn.addEventListener('click', function (btn) {
+    if (input.value === '') {
+        feedback.classList.add('show');
+
+        setTimeout(() => {
+            feedback.classList.remove('show');
+        }, 3000);
+    }
+    else{
+        let li=document.createElement('li');
+           li.innerHTML=input.value;
+           list.appendChild(li);
+           input.value="";
+           let span=document.createElement('span');
+           span.innerHTML="\u00d7";
+           li.appendChild(span);
+    }
+    saveData();
+})
+list.addEventListener('click',function(e){
+   if(e.target.tagName==="LI"){
+    e.target.classList.add("checked");
+    saveData();
+   }
+   else if(e.target.tagName==="SPAN"){
+    e.target.parentElement.remove();
+    saveData();
+   }
+},false);
+
+function saveData(){
+    localStorage.setItem("data",list.innerHTML);
+}
+function showList(){
+    list.innerHTML=localStorage.getItem("data");
+}
+showList();
